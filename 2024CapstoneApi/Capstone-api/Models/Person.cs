@@ -7,7 +7,7 @@ namespace Capstone_api.Models
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public string Id { get; set; } = "";
         [Required]
         public string FName { get; set; } = "";
         [Required]

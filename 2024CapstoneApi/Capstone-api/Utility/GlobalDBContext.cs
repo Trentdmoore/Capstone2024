@@ -5,7 +5,8 @@ namespace Capstone_api.Utility
 {
     public partial class GlobalDBContext : DbContext
     {
-        public GlobalDBContext(DbContextOptions<GlobalDBContext> options) : base(options) { }
+        public GlobalDBContext(DbContextOptions<GlobalDBContext> options) 
+            : base(options) { }
 
         public virtual DbSet<Person> Person { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
