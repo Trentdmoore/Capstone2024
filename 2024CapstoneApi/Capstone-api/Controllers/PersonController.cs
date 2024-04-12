@@ -39,5 +39,28 @@ namespace Capstone_api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("/InsertPerson")]
+        public async Task<ActionResult<string>> InsertPersonInfo(Person person)
+        {
+            try
+            {
+                var dataHandler = new DataHandler();
+                var data = await dataHandler.insertNewPerson(_dbContext, person);
+
+                if(data == "Success")
+                {
+                    return Ok(data);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

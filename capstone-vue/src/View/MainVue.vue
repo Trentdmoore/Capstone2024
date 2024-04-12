@@ -1,5 +1,6 @@
 <template>
-
+    <v-alert v-model="successAlert" type="success" :text="alertText" closable>
+    </v-alert>
     <!-- APP BAR CODE -->
     <v-app-bar :elevation="2" :color="'blue-darken-4'">
         <template v-slot:prepend>
@@ -17,6 +18,7 @@
                 <v-data-table
                     :headers = "CurrentTableHeaders"
                     :items = "personList"
+                    :row-props="colorSelectedRow"
                     v-model="selectedRow"
                     return-object
                     select-strategy="single"
@@ -36,12 +38,73 @@
                             <v-btn class="mx-auto">Access Logs</v-btn>
 
                             <v-btn class="mx-auto">Request Logs</v-btn>
+
+                            <v-btn v-show="currentTableView==='Person'" class="mx-auto" @click="toggleCreatePersonDialog()">Create Person</v-btn>
                         </v-toolbar>
                     </template>
                 </v-data-table>
             </v-col>
 
             <v-col cols="12">
+                <v-form>
+                    <v-row>
+                        <v-col cols = 3>
+                            <v-text-field variant="underlined" label="ID" v-model="personSelectedObj.id">
+    
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols = 3>
+                            <v-text-field variant="underlined" label="CID" v-model="personSelectedObj.cid">
+
+                            </v-text-field>
+                        </v-col>
+                        
+                        <v-col cols = 3>
+                            <v-text-field variant="underlined" label="Email" v-model="personSelectedObj.email">
+    
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols = 3>
+                            <v-text-field variant="underlined" label="Title" v-model="personSelectedObj.title">
+    
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols = 3>
+                            <v-text-field variant="underlined" label="First Name" v-model="personSelectedObj.fName">
+    
+                            </v-text-field>
+                        </v-col>
+                        <v-col cols = 3>
+                            <v-text-field variant="underlined" label="Last Name" v-model="personSelectedObj.lName">
+    
+                            </v-text-field>
+                        </v-col>
+
+                        <v-col cols = 3>
+                            <v-text-field variant="underlined" label="Access" v-model="personSelectedObj.accessCode">
+    
+                            </v-text-field>
+                        </v-col>                    
+                    </v-row>
+    
+                    <v-row>
+                        <v-col>
+    
+                        </v-col>
+                    </v-row>
+                </v-form>
+            </v-col>
+        </v-row>
+    </v-container>
+
+    <v-dialog v-model="showCreatePersonDialog">
+        <v-card width="1000" height="400" class="mx-auto">
+            <v-card-title>Create Person</v-card-title>
+            <v-card-subtitle>Fill out form and click sumbit</v-card-subtitle>
+                      
+            <v-card-item>
                 <v-form>
                     <v-row>
                         <v-col cols = 3>
@@ -91,10 +154,14 @@
                         </v-col>
                     </v-row>
                 </v-form>
-            </v-col>
-        </v-row>
-    </v-container>
+                <v-btn :color="'success'" class="mr-3" @click="InsertPersonInfo()">Submit</v-btn>
+                <v-btn :color="'error'" @click="toggleCreatePersonDialog()">Close</v-btn>
+            </v-card-item>
+        </v-card>
 
+    </v-dialog>
+
+    
 
 </template>
 
@@ -135,6 +202,15 @@ import {personApi} from '../service/person.api.js'
                 selectedRow: [],
 
                 //DataBase Model Objects
+                personSelectedObj: {
+                    id: "",
+                    fName: "",
+                    lName: "",
+                    email: "",
+                    title: "",
+                    cid: "",
+                    accessCode: ""
+                },
                 personObj: {
                     id: "",
                     fName: "",
@@ -146,6 +222,11 @@ import {personApi} from '../service/person.api.js'
                 },
                 requestLogObj: {},
                 accessLogObj: {},
+
+                showCreatePersonDialog: false,
+
+                successAlert: false,
+                alertText: "",
 
                 //DataBase Return Lists
                 accessLogList: [],
@@ -164,12 +245,41 @@ import {personApi} from '../service/person.api.js'
                     this.CurrentTableHeaders = this.PersonTableHeaders;
                 });
             },
+            async InsertPersonInfo(){
+                await personApi.insertPersonInfo(this.personObj).then(response => {
+                    if(response === 'Success'){
+                        this.alertText = `${this.personObj.fName} ${this.personObj.lName} was successfully created`
+                        this.successAlert = true;
+                        this.toggleCreatePersonDialog();
+                        this.LoadTable();
+                    }
+                    else{
+                        this.alertText = `${this.personObj.fName} ${this.personObj.lName} failed to created`
+                    }
+                })
+            },
+            LoadTable(){
+                this.GetAllPersons();
+            },
+            colorSelectedRow(row) {
+                if(row.item === this.selectedRow[0]){
+                    return {style: 'background: #42A5F5; color: white;'};
+                }
+            },
+            toggleCreatePersonDialog(){
+                if(this.showCreatePersonDialog === false){
+                    this.showCreatePersonDialog = true;
+                }
+                else{
+                    this.showCreatePersonDialog = false;
+                }
+            }
         },
         watch: {
             selectedRow(){
                 if(this.currentTableView === 'Person'){
                     if(this.selectedRow.length < 1){
-                        this.personObj = {
+                        this.personSelectedObj = {
                             id: "",
                             fName: "",
                             lName: "",
@@ -180,13 +290,18 @@ import {personApi} from '../service/person.api.js'
                         }
                     }
                     else{
-                        this.personObj = this.selectedRow[0]
+                        this.personSelectedObj = this.selectedRow[0]
                     }
                 }
             }
         },
         async beforeMount() {
-            await this.GetAllPersons()
+            this.LoadTable();
+        },
+        created(){
+            setTimeout(() =>{
+                this.successAlert=false
+            }, 3000)
         }
         
     }

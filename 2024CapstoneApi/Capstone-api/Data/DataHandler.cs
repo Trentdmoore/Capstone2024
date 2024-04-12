@@ -53,5 +53,43 @@ namespace Capstone_api.Data
                 return personList;
             }
         }
+
+        public async Task<string> insertNewPerson(GlobalDBContext dbContext, Person person)
+        {
+
+            var conn = dbContext.Database.GetDbConnection();
+
+            if (conn.State != ConnectionState.Open)
+            {
+                await conn.OpenAsync();
+            }
+
+            using (var command = conn.CreateCommand())
+            {
+                command.Connection = conn;
+                var param = new CustomDBParameter(command);
+                command.Parameters.Add(param.CreateDbParameter("ID", person.Id));
+                command.Parameters.Add(param.CreateDbParameter("FName", person.FName));
+                command.Parameters.Add(param.CreateDbParameter("LName", person.LName));
+                command.Parameters.Add(param.CreateDbParameter("Email", person.Email));
+                command.Parameters.Add(param.CreateDbParameter("Title", person.Title));
+                command.Parameters.Add(param.CreateDbParameter("CID", person.CID));
+                command.Parameters.Add(param.CreateDbParameter("AccessCode", person.AccessCode));
+
+                command.CommandText = sqlQueryList.InsertPersonInfo();
+
+
+                var rowsaffected = command.ExecuteNonQuery();
+
+                if(rowsaffected == 1)
+                {
+                    return "Success";
+                }
+                else
+                {
+                    return "Fail";
+                }
+            }
+        }
     }
 }

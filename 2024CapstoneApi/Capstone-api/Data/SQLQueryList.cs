@@ -12,5 +12,14 @@
 
             return sql;
         }
+
+
+        public string InsertPersonInfo()
+        {
+            string sql =
+                @"INSERT INTO CP_Person (ID, FName, LName, Email, Title, CID, AccessCode)
+                  VALUES (@ID, @FName, @LName, @Email, @Title, @CID, @AccessCode)";
+            return sql;
+        }
     }
 }
