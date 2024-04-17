@@ -40,6 +40,30 @@ namespace Capstone_api.Controllers
             }
         }
 
+        [HttpGet("/AllAccessLogs")]
+        public async Task<ActionResult<List<AccessLog>>> GetAllAccessLogs()
+        {
+            try
+            {
+                var dataHandler = new DataHandler();
+                var data = await dataHandler.getAllAccessLogs(_dbContext);
+
+                if (data != null)
+                {
+                    return Ok(data);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("/InsertPerson")]
         public async Task<ActionResult<string>> InsertPersonInfo(Person person)
         {
