@@ -2,15 +2,32 @@
     <v-alert v-model="successAlert" type="success" :text="alertText" closable>
     </v-alert>
     <!-- APP BAR CODE -->
-    <v-app-bar :elevation="2" :color="'blue-darken-4'">
-        <template v-slot:prepend>
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
-            <v-app-bar-title class="mx-auto">Application Bar</v-app-bar-title>
-        </template>
+    <v-app-bar
+        :color="'blue-darken-4'"
+        prominent
+      >
+        <v-app-bar-nav-icon variant="text" @click.stop="showNavDrawer = !showNavDrawer"></v-app-bar-nav-icon>
+
+        <v-toolbar-title>Main View</v-toolbar-title>
 
         <v-spacer></v-spacer>
-        
-    </v-app-bar>
+
+        <v-btn icon="mdi-magnify" variant="text"></v-btn>
+
+        <v-btn icon="mdi-filter" variant="text"></v-btn>
+
+        <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
+      </v-app-bar>
+
+      <v-navigation-drawer
+        v-model="showNavDrawer"
+        location="start"
+        temporary
+      >
+        <v-list
+          :items="navOptions"
+        ></v-list>
+      </v-navigation-drawer>
 
     <v-container>
         <v-row>
@@ -35,9 +52,6 @@
 
                             <v-spacer></v-spacer>
 
-                            <v-btn class="mx-auto">Access Logs</v-btn>
-
-                            <v-btn class="mx-auto">Request Logs</v-btn>
 
                             <v-btn v-show="currentTableView==='Person'" class="mx-auto" @click="toggleCreatePersonDialog()">Create Person</v-btn>
                         </v-toolbar>
@@ -223,8 +237,27 @@ import {personApi} from '../service/person.api.js'
                 requestLogObj: {},
                 accessLogObj: {},
 
+                //Create Person Variables
                 showCreatePersonDialog: false,
 
+                //Navigation Variables
+                showNavDrawer: false,
+                navOptions: [
+                    {
+                        title: 'Create Person',
+                        value: 'createPerson'
+                    },
+                    {
+                        title: 'Manage Employee',
+                        value: 'managaeEmployee'
+                    },
+                    {
+                        title: 'Logs Menu',
+                        value: 'logMenu'
+                    }
+                ],
+
+                //Alert Variables
                 successAlert: false,
                 alertText: "",
 
@@ -252,6 +285,7 @@ import {personApi} from '../service/person.api.js'
                         this.successAlert = true;
                         this.toggleCreatePersonDialog();
                         this.LoadTable();
+                        this.setAlertTimeOut();
                     }
                     else{
                         this.alertText = `${this.personObj.fName} ${this.personObj.lName} failed to created`
@@ -273,6 +307,11 @@ import {personApi} from '../service/person.api.js'
                 else{
                     this.showCreatePersonDialog = false;
                 }
+            },
+            setAlertTimeOut(){
+                setTimeout(() =>{
+                    this.successAlert=false
+                }, 3000)
             }
         },
         watch: {
@@ -299,9 +338,7 @@ import {personApi} from '../service/person.api.js'
             this.LoadTable();
         },
         created(){
-            setTimeout(() =>{
-                this.successAlert=false
-            }, 3000)
+
         }
         
     }
