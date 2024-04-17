@@ -21,5 +21,14 @@
                   VALUES (@ID, @FName, @LName, @Email, @Title, @CID, @AccessCode)";
             return sql;
         }
+
+        public string GetAllAccessLogs()
+        {
+            string sql =
+                @"SELECT ID, LockNum, AccessTime, CID, Accepted
+                  FROM CP_AccessLog;                                ";
+
+            return sql;
+        }
     }
 }
