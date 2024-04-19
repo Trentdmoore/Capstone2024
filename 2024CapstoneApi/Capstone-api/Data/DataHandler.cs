@@ -90,6 +90,44 @@ namespace Capstone_api.Data
                 return AccessLogList;
             }
         }
+
+        public async Task<List<RequestLog>> getAllRequestLogs(GlobalDBContext dbContext)
+        {
+            var RequestLogList = new List<RequestLog>();
+
+            var conn = dbContext.Database.GetDbConnection();
+
+            if (conn.State != ConnectionState.Open)
+            {
+                await conn.OpenAsync();
+            }
+
+            using (var command = conn.CreateCommand())
+            {
+                command.Connection = conn;
+
+                command.CommandText = sqlQueryList.GetAllRequestLogs();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var requestLog = new RequestLog();
+
+                        requestLog.ID = reader.GetInt32("ID");
+                        requestLog.LockNum = reader.GetInt32("LockNum");
+                        requestLog.AccessCode = reader.GetString("AccessCode");
+                        requestLog.DateRequested = reader.GetDateTime("DateRequested");
+                        requestLog.DateApproved = reader.GetDateTime("DateApproved");
+                        requestLog.AdvisorID = reader.GetInt32("AdvisorID");
+
+                        RequestLogList.Add(requestLog);
+                    }
+
+                }
+                return RequestLogList;
+            }
+        }
         public async Task<string> insertNewPerson(GlobalDBContext dbContext, Person person)
         {
 

@@ -30,5 +30,14 @@
 
             return sql;
         }
+
+        public string GetAllRequestLogs()
+        {
+            string sql =
+                @"SELECT ID, LockNum, AccessCode, DateRequested, DateApproved, AdvisorID
+                  FROM CP_RequestLog;                                ";
+
+            return sql;
+        }
     }
 }
