@@ -3,7 +3,7 @@
     </v-alert>
     <!-- APP BAR CODE -->
     <v-app-bar
-        :color="'blue-darken-4'"
+        :color="'red-darken-4'"
         prominent
       >
         <v-app-bar-nav-icon variant="text" @click.stop="showNavDrawer = !showNavDrawer"></v-app-bar-nav-icon>
@@ -44,7 +44,7 @@
                 
                     <template v-slot:top>
                         <v-toolbar
-                            :color="'blue-lighten-1'"
+                            :color="'red-lighten-1'"
                             :rounded="true"
                             dark
                         >
