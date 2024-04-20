@@ -31,6 +31,7 @@
 
     <v-container>
         <v-row>
+            <!--Table View-->
             <v-col cols="12">
                 <v-data-table
                     :headers = "CurrentTableHeaders"
@@ -58,61 +59,46 @@
                     </template>
                 </v-data-table>
             </v-col>
-
-            <v-col cols="12">
-                <v-form>
-                    <v-row>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="ID" v-model="personSelectedObj.id">
-    
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="CID" v-model="personSelectedObj.cid">
-
-                            </v-text-field>
-                        </v-col>
-                        
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="Email" v-model="personSelectedObj.email">
-    
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="Title" v-model="personSelectedObj.title">
-    
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="First Name" v-model="personSelectedObj.fName">
-    
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="Last Name" v-model="personSelectedObj.lName">
-    
-                            </v-text-field>
-                        </v-col>
-
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="Access" v-model="personSelectedObj.accessCode">
-    
-                            </v-text-field>
-                        </v-col>                    
-                    </v-row>
-    
-                    <v-row>
-                        <v-col>
-    
-                        </v-col>
-                    </v-row>
-                </v-form>
+            
+            <!--Info Form-->
+            <v-col>
+                <v-card class="section-container" elevation="2" flex>
+                    <v-card-title>Information</v-card-title>
+                        <v-card-text>
+                            <v-row >
+                                <v-col cols="2">
+                                    <!-- Placeholder for picture -->
+                                    <img src="placeholder.jpg" alt="Placeholder" class="picture" />
+                                </v-col>
+                                <v-row>
+                                    <!-- Text boxes -->
+                                    <v-col cols="3">
+                                        <v-text-field variant="underlined" label="First Name" v-model="personSelectedObj.fName"></v-text-field>
+                                        <v-text-field variant="underlined" label="ID" v-model="personSelectedObj.id"></v-text-field>
+                                        <v-text-field variant="underlined" label="Access" v-model="personSelectedObj.accessCode"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="3">
+                                        <v-text-field variant="underlined" label="Last Name" v-model="personSelectedObj.lName"></v-text-field>
+                                        <v-text-field variant="underlined" label="CID" v-model="personSelectedObj.cid"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="3">
+                                        <v-text-field variant="underlined" label="Email" v-model="personSelectedObj.email"></v-text-field>
+                                        <v-text-field variant="underlined" label="Title" v-model="personSelectedObj.title"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-row>
+                        </v-card-text>
+                    <v-card-actions>
+                    <!-- Save and Delete buttons -->
+                    <v-btn @click="saveData" color="primary">Save</v-btn>
+                    <v-btn @click="deleteData" color="error">Delete</v-btn>
+                    </v-card-actions>
+                </v-card>
             </v-col>
         </v-row>
     </v-container>
 
+    <!--Create Person Form-->
     <v-dialog v-model="showCreatePersonDialog">
         <v-card width="1000" height="400" class="mx-auto">
             <v-card-title>Create Person</v-card-title>
@@ -127,7 +113,7 @@
                             </v-text-field>
                         </v-col>
                         <v-col cols = 3>
-                            <v-text-field variant="underlined" label="CID" v-model="personObj.cid">
+                            <v-text-field variant="underlined" label="CID" id="CID" v-model="personObj.cid">
 
                             </v-text-field>
                         </v-col>
@@ -138,9 +124,13 @@
                             </v-text-field>
                         </v-col>
                         <v-col cols = 3>
-                            <v-text-field variant="underlined" label="Title" v-model="personObj.title">
-    
-                            </v-text-field>
+                            
+                            <v-select
+                                    v-model="personObj.title"
+                                        :items="dropdownItems2"
+                                        label="Title"
+                                    outlined
+                            ></v-select>
                         </v-col>
                     </v-row>
                     <v-row>
@@ -155,10 +145,13 @@
                             </v-text-field>
                         </v-col>
 
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="Access" v-model="personObj.accessCode">
-    
-                            </v-text-field>
+                        <v-col cols="3">
+                            <v-select
+                                    v-model="personObj.accessCode"
+                                        :items="dropdownItems"
+                                        label="Access"
+                                    outlined
+                            ></v-select>
                         </v-col>                    
                     </v-row>
     
@@ -172,7 +165,6 @@
                 <v-btn :color="'error'" @click="toggleCreatePersonDialog()">Close</v-btn>
             </v-card-item>
         </v-card>
-
     </v-dialog>
 
     
@@ -268,10 +260,21 @@ import {personApi} from '../service/person.api.js'
 
                 showSelected: true,
 
-                
+                selectedItem: null,
+                    dropdownItems: [
+                        'WKD',
+                    ],
+
+                selectedItem2: null,
+                    dropdownItems2: [
+                        'Student',
+                        'Guest'
+                    ],
+
             }
         },
         methods: {
+
             async GetAllPersons() {
                 await personApi.getAllPersons().then(response => {
                     this.personList = response;
