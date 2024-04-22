@@ -65,28 +65,30 @@
                 <v-card class="section-container" elevation="2" flex>
                     <v-card-title>Information</v-card-title>
                         <v-card-text>
-                            <v-row >
-                                <v-col cols="2">
-                                    <!-- Placeholder for picture -->
-                                    <img src="placeholder.jpg" alt="Placeholder" class="picture" />
-                                </v-col>
-                                <v-row>
-                                    <!-- Text boxes -->
-                                    <v-col cols="3">
-                                        <v-text-field variant="underlined" label="First Name" v-model="personSelectedObj.fName"></v-text-field>
-                                        <v-text-field variant="underlined" label="ID" v-model="personSelectedObj.id"></v-text-field>
-                                        <v-text-field variant="underlined" label="Access" v-model="personSelectedObj.accessCode"></v-text-field>
+                            <v-form>
+                                <v-row >
+                                    <v-col cols="2">
+                                        <!-- Placeholder for picture -->
+                                        <img src="placeholder.jpg" alt="Placeholder" class="picture" />
                                     </v-col>
-                                    <v-col cols="3">
-                                        <v-text-field variant="underlined" label="Last Name" v-model="personSelectedObj.lName"></v-text-field>
-                                        <v-text-field variant="underlined" label="CID" v-model="personSelectedObj.cid"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="3">
-                                        <v-text-field variant="underlined" label="Email" v-model="personSelectedObj.email"></v-text-field>
-                                        <v-text-field variant="underlined" label="Title" v-model="personSelectedObj.title"></v-text-field>
-                                    </v-col>
+                                    <v-row>
+                                        <!-- Text boxes -->
+                                        <v-col cols="3">
+                                            <v-text-field variant="underlined" label="First Name" v-model="personSelectedObj.fName"></v-text-field>
+                                            <v-text-field variant="underlined" label="ID" v-model="personSelectedObj.id"></v-text-field>
+                                            <v-text-field variant="underlined" label="Access" v-model="personSelectedObj.accessCode"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="3">
+                                            <v-text-field variant="underlined" label="Last Name" v-model="personSelectedObj.lName"></v-text-field>
+                                            <v-text-field variant="underlined" label="CID" v-model="personSelectedObj.cid"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="3">
+                                            <v-text-field variant="underlined" label="Email" v-model="personSelectedObj.email"></v-text-field>
+                                            <v-text-field variant="underlined" label="Title" v-model="personSelectedObj.title"></v-text-field>
+                                        </v-col>
+                                    </v-row>
                                 </v-row>
-                            </v-row>
+                            </v-form>
                         </v-card-text>
                     <v-card-actions>
                     <!-- Save and Delete buttons -->
@@ -235,6 +237,10 @@ import {personApi} from '../service/person.api.js'
                 //Navigation Variables
                 showNavDrawer: false,
                 navOptions: [
+                    {
+                        title: 'Home',
+                        value: 'home'
+                    },
                     {
                         title: 'Create Person',
                         value: 'createPerson'
