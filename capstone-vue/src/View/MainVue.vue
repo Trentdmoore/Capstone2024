@@ -8,7 +8,7 @@
       >
         <v-app-bar-nav-icon variant="text" @click.stop="showNavDrawer = !showNavDrawer"></v-app-bar-nav-icon>
 
-        <v-toolbar-title>Main View</v-toolbar-title>
+        <v-toolbar-title>Capstone Manager</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -61,8 +61,8 @@
             </v-col>
             
             <!--Info Form-->
-            <v-col>
-                <v-card class="section-container" elevation="2" flex>
+            <v-col style="display: none" id="InfoSection">
+                <v-card outlined color="grey-lighten-3" class="section-container" elevation="2">
                     <v-card-title>Information</v-card-title>
                         <v-card-text>
                             <v-row >
@@ -259,7 +259,9 @@ import {personApi} from '../service/person.api.js'
                 personList: [],
 
                 showSelected: true,
+                
 
+                //Dropdowns for title and access on create person form
                 selectedItem: null,
                     dropdownItems: [
                         'WKD',
@@ -270,7 +272,6 @@ import {personApi} from '../service/person.api.js'
                         'Student',
                         'Guest'
                     ],
-
             }
         },
         methods: {
@@ -291,7 +292,7 @@ import {personApi} from '../service/person.api.js'
                         this.setAlertTimeOut();
                     }
                     else{
-                        this.alertText = `${this.personObj.fName} ${this.personObj.lName} failed to created`
+                        this.alertText = `${this.personObj.fName} ${this.personObj.lName} failed to create`
                     }
                 })
             },
@@ -320,6 +321,7 @@ import {personApi} from '../service/person.api.js'
         watch: {
             selectedRow(){
                 if(this.currentTableView === 'Person'){
+                    document.getElementById("InfoSection").style.display = "none";
                     if(this.selectedRow.length < 1){
                         this.personSelectedObj = {
                             id: "",
@@ -332,6 +334,7 @@ import {personApi} from '../service/person.api.js'
                         }
                     }
                     else{
+                        document.getElementById("InfoSection").style.display = "block";
                         this.personSelectedObj = this.selectedRow[0]
                     }
                 }
