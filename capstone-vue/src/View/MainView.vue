@@ -35,15 +35,15 @@
             </v-col>
             
             <!--Info Form-->
-            <v-col>
-                <v-card class="section-container" elevation="2" flex>
+            <v-col style="display: none" id="InfoSection">
+                <v-card outlined color="grey-lighten-3" class="section-container" elevation="2" flex>
                     <v-card-title :style="'text-align: left'">Information</v-card-title>
                         <v-card-text>
                             <v-form>
                                 <v-row >
                                     <v-col cols="2">
                                         <!-- Placeholder for picture -->
-                                        <img src="placeholder.jpg" alt="Placeholder" class="picture" />
+                                        <img src="placeholder.jpg" alt="Placeholder" class="picture"/>
                                     </v-col>
                                     <v-row>
                                         <!-- Text boxes -->
@@ -151,6 +151,7 @@ import {personApi} from '../service/person.api.js'
 
                 showSelected: true,
 
+                //Dropdowns for title and access on create person form
                 selectedItem: null,
                     dropdownItems: [
                         'WKD',
@@ -211,6 +212,7 @@ import {personApi} from '../service/person.api.js'
         watch: {
             selectedRow(){
                 if(this.currentTableView === 'Person'){
+                    document.getElementById("InfoSection").style.display = "none";
                     if(this.selectedRow.length < 1){
                         this.personSelectedObj = {
                             id: "",
@@ -223,6 +225,7 @@ import {personApi} from '../service/person.api.js'
                         }
                     }
                     else{
+                        document.getElementById("InfoSection").style.display = "block";
                         this.personSelectedObj = this.selectedRow[0]
                     }
                 }
