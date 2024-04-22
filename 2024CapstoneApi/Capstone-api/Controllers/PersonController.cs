@@ -88,6 +88,53 @@ namespace Capstone_api.Controllers
             }
         }
 
+        [HttpDelete("/DeletePerson/{id:int}")]
+        public async Task<ActionResult> DeletePerson(int id)
+        {
+            try
+            {
+                var dataHandler = new DataHandler();
+                var data = await dataHandler.deletePerson(_dbContext, id);
+
+                if(data == "Success")
+                {
+                    return Ok(data);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+
+        [HttpPut("/UpdatePerson")]
+        public async Task<ActionResult> UpdatePerson(Person person)
+        {
+            try
+            {
+                var dataHanler = new DataHandler();
+                var data = await dataHanler.updatePerson(_dbContext, person);
+
+                if (data == "Success")
+                {
+                    return Ok(data);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("/InsertPerson")]
         public async Task<ActionResult<string>> InsertPersonInfo(Person person)
         {

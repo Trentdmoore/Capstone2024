@@ -39,5 +39,27 @@
 
             return sql;
         }
+
+        public string UdatePersonInfo()
+        {
+            string sql =
+                @"UPDATE CP_Person
+                  SET FName =			@FName,
+	                  LName =			@LName,
+	                  Email =			@Email,
+	                  Title =			@Title,
+	                  CID =			    @CID,
+	                  AccessCode =	    @AccessCode
+                 WHERE ID = @ID;";
+            return sql;
+        }
+
+        public string DeletePerson()
+        {
+            string sql =
+                @"DELETE FROM CP_Person
+                  WHERE ID = @ID;";
+            return sql;
+        }
     }
 }

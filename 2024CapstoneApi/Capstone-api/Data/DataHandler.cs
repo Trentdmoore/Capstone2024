@@ -15,6 +15,74 @@ namespace Capstone_api.Data
 
         }
 
+
+        public async Task<string> updatePerson(GlobalDBContext dbContext, Person person)
+        {
+            var conn = dbContext.Database.GetDbConnection();
+
+            if(conn.State != ConnectionState.Open)
+            {
+                await conn.OpenAsync();
+            }
+
+            using(var command = conn.CreateCommand())
+            {
+                command.Connection = conn;
+                var param = new CustomDBParameter(command);
+                command.Parameters.Add(param.CreateDbParameter("ID", person.Id));
+                command.Parameters.Add(param.CreateDbParameter("FName", person.FName));
+                command.Parameters.Add(param.CreateDbParameter("LName", person.LName));
+                command.Parameters.Add(param.CreateDbParameter("Email", person.Email));
+                command.Parameters.Add(param.CreateDbParameter("Title", person.Title));
+                command.Parameters.Add(param.CreateDbParameter("CID", person.CID));
+                command.Parameters.Add(param.CreateDbParameter("AccessCode", person.AccessCode));
+
+                command.CommandText = sqlQueryList.UdatePersonInfo();
+
+                var rowsaffected = command.ExecuteNonQuery();
+
+                if(rowsaffected == 1)
+                {
+                    return "Success";
+                }
+                else
+                {
+                    return "Fail";
+                }
+            }
+        }
+
+        public async Task<string> deletePerson(GlobalDBContext dbContext, int id)
+        {
+            var conn = dbContext.Database.GetDbConnection();
+
+            if(conn.State != ConnectionState.Open)
+            {
+                await conn.OpenAsync();
+            }
+
+            using(var command = conn.CreateCommand())
+            {
+                command.Connection = conn;
+
+                var param = new CustomDBParameter(command);
+                command.Parameters.Add(param.CreateDbParameter("@ID", id));
+
+                command.CommandText = sqlQueryList.DeletePerson();
+
+                var rowsaffected = command.ExecuteNonQuery();
+
+                if(rowsaffected != 1)
+                {
+                    return "Fail";
+                }
+                else
+                {
+                    return "Success";
+                }
+            }
+        }
+
         public async Task<List<Person>> getAllPersons(GlobalDBContext dbContext)
         {
             var personList = new List<Person>();
