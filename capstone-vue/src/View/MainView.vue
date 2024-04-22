@@ -1,35 +1,9 @@
 <template>
     <v-alert v-model="successAlert" type="success" :text="alertText" closable>
     </v-alert>
-    <!-- APP BAR CODE -->
-    <v-app-bar
-        :color="'red-darken-4'"
-        prominent
-      >
-        <v-app-bar-nav-icon variant="text" @click.stop="showNavDrawer = !showNavDrawer"></v-app-bar-nav-icon>
 
-        <v-toolbar-title>Main View</v-toolbar-title>
 
-        <v-spacer></v-spacer>
-
-        <v-btn icon="mdi-magnify" variant="text"></v-btn>
-
-        <v-btn icon="mdi-filter" variant="text"></v-btn>
-
-        <v-btn icon="mdi-dots-vertical" variant="text"></v-btn>
-      </v-app-bar>
-
-      <v-navigation-drawer
-        v-model="showNavDrawer"
-        location="start"
-        temporary
-      >
-        <v-list
-          :items="navOptions"
-        ></v-list>
-      </v-navigation-drawer>
-
-    <v-container>
+    <v-container class="mt-16">
         <v-row>
             <!--Table View-->
             <v-col cols="12">
@@ -49,7 +23,7 @@
                             :rounded="true"
                             dark
                         >
-                            <v-toolbar-title>{{ currentTableView }}</v-toolbar-title>
+                            <v-toolbar-title :style="'text-align: left'">{{ currentTableView }}</v-toolbar-title>
 
                             <v-spacer></v-spacer>
 
@@ -63,7 +37,7 @@
             <!--Info Form-->
             <v-col>
                 <v-card class="section-container" elevation="2" flex>
-                    <v-card-title>Information</v-card-title>
+                    <v-card-title :style="'text-align: left'">Information</v-card-title>
                         <v-card-text>
                             <v-form>
                                 <v-row >
@@ -99,77 +73,6 @@
             </v-col>
         </v-row>
     </v-container>
-
-    <!--Create Person Form-->
-    <v-dialog v-model="showCreatePersonDialog">
-        <v-card width="1000" height="400" class="mx-auto">
-            <v-card-title>Create Person</v-card-title>
-            <v-card-subtitle>Fill out form and click sumbit</v-card-subtitle>
-                      
-            <v-card-item>
-                <v-form>
-                    <v-row>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="ID" v-model="personObj.id">
-    
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="CID" id="CID" v-model="personObj.cid">
-
-                            </v-text-field>
-                        </v-col>
-                        
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="Email" v-model="personObj.email">
-    
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols = 3>
-                            
-                            <v-select
-                                    v-model="personObj.title"
-                                        :items="dropdownItems2"
-                                        label="Title"
-                                    outlined
-                            ></v-select>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="First Name" v-model="personObj.fName">
-    
-                            </v-text-field>
-                        </v-col>
-                        <v-col cols = 3>
-                            <v-text-field variant="underlined" label="Last Name" v-model="personObj.lName">
-    
-                            </v-text-field>
-                        </v-col>
-
-                        <v-col cols="3">
-                            <v-select
-                                    v-model="personObj.accessCode"
-                                        :items="dropdownItems"
-                                        label="Access"
-                                    outlined
-                            ></v-select>
-                        </v-col>                    
-                    </v-row>
-    
-                    <v-row>
-                        <v-col>
-    
-                        </v-col>
-                    </v-row>
-                </v-form>
-                <v-btn :color="'success'" class="mr-3" @click="InsertPersonInfo()">Submit</v-btn>
-                <v-btn :color="'error'" @click="toggleCreatePersonDialog()">Close</v-btn>
-            </v-card-item>
-        </v-card>
-    </v-dialog>
-
-    
 
 </template>
 
@@ -235,25 +138,7 @@ import {personApi} from '../service/person.api.js'
                 showCreatePersonDialog: false,
 
                 //Navigation Variables
-                showNavDrawer: false,
-                navOptions: [
-                    {
-                        title: 'Home',
-                        value: 'home'
-                    },
-                    {
-                        title: 'Create Person',
-                        value: 'createPerson'
-                    },
-                    {
-                        title: 'Manage Employee',
-                        value: 'managaeEmployee'
-                    },
-                    {
-                        title: 'Logs Menu',
-                        value: 'logMenu'
-                    }
-                ],
+
 
                 //Alert Variables
                 successAlert: false,
