@@ -61,5 +61,19 @@
                   WHERE ID = @ID;";
             return sql;
         }
+
+        public string PendingRequest()
+        {
+            string sql =
+                @"SELECT CASE WHEN EXISTS (
+	                SELECT *
+	                FROM CP_RequestLog
+	                WHERE ID = @ID 
+	                AND	  Approved = 'N'
+                  )
+                  THEN 'Y'
+                  ELSE 'N' END;";
+            return sql;
+        }
     }
 }
