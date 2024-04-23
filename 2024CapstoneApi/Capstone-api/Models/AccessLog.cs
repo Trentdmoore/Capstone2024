@@ -9,7 +9,7 @@ namespace Capstone_api.Models
         [Required]
         public int LockNum { get; set; }
         [Required]
-        public DateTime AccesTime { get; set; }
+        public DateTime AccessTime { get; set; }
         [Required]
         public int CID { get; set; }
         [Required]

@@ -123,7 +123,7 @@ export default {
         async GetAllAccessLogs() {
             await personApi.getAllAccessLogs().then(response => {
                 this.accessLogList = response;
-                this.CurrentTableHeaders = this.AccessLogTableHeaders;
+                this.CurrentTableHeaders1 = this.AccessLogTableHeaders;
             });
         },
 

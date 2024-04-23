@@ -7,8 +7,8 @@
         <v-row>
             <!--Table View-->
             <v-col cols="12">
-                <v-data-table
-                    :headers = "CurrentTableHeaders"
+                <v-data-table :style="'text-align: left'"
+                    :headers = "CurrentTableHeaders" 
                     :items = "personList"
                     :row-props="colorSelectedRow"
                     v-model="selectedRow"
@@ -19,16 +19,13 @@
                 
                     <template v-slot:top>
                         <v-toolbar
-                            :color="'red-lighten-1'"
+                            :color="'teal-lighten-1'"
                             :rounded="true"
                             dark
                         >
                             <v-toolbar-title :style="'text-align: left'">{{ currentTableView }}</v-toolbar-title>
 
                             <v-spacer></v-spacer>
-
-
-                            <v-btn v-show="currentTableView==='Person'" class="mx-auto" @click="toggleCreatePersonDialog()">Create Person</v-btn>
                         </v-toolbar>
                     </template>
                 </v-data-table>
