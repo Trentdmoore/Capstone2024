@@ -1,5 +1,6 @@
 ﻿using Capstone_api.Data;
 using Capstone_api.Models;
+using Capstone_api.Models.Responses;
 using Capstone_api.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace Capstone_api.Controllers
         }
 
         [HttpGet("/allPersons")]
-        public async Task<ActionResult<List<Person>>> GetAllPersons()
+        public async Task<ActionResult<PersonResponse>> GetAllPersons()
         {
             try
             {

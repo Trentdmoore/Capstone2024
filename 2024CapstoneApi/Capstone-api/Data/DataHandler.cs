@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 using System.Data;
+using Capstone_api.Models.Responses;
+using System;
 
 namespace Capstone_api.Data
 {
@@ -83,9 +85,13 @@ namespace Capstone_api.Data
             }
         }
 
-        public async Task<List<Person>> getAllPersons(GlobalDBContext dbContext)
+        public async Task<PersonResponse> getAllPersons(GlobalDBContext dbContext)
         {
+            var response = new PersonResponse();
+
             var personList = new List<Person>();
+
+            var statisticList = new List<QuickStatistics>();
 
             var conn = dbContext.Database.GetDbConnection();
 
@@ -117,8 +123,28 @@ namespace Capstone_api.Data
 
                         personList.Add(person);
                     }
+                    response.PersonList = personList;
                 }
-                return personList;
+                command.CommandText = sqlQueryList.QuickStatistics();
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var statistic = new QuickStatistics();
+
+                        statistic.ID = reader.GetInt32("ID");
+                        statistic.StartTime = (TimeSpan)reader.GetValue("StartTime");
+                        statistic.EndTime = (TimeSpan)reader.GetValue("EndTime");
+                        statistic.NumFailedLastDay = reader.GetInt32("NumFailed");
+                        statistic.HasPendingRequest = reader.GetString("HasPendingRequest");
+                        statistic.NumAccessesLastHour = reader.GetInt32("NumAccessesLastHour");
+
+                        statisticList.Add(statistic);
+                    }
+                    response.StatisticsList = statisticList;
+                }
+                return response;
             }
         }
 

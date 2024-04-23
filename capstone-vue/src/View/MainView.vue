@@ -145,6 +145,7 @@ import {personApi} from '../service/person.api.js'
                 accessLogList: [],
                 requestLogList: [],
                 personList: [],
+                statisticList: [],
 
                 showSelected: true,
 
@@ -166,7 +167,8 @@ import {personApi} from '../service/person.api.js'
 
             async GetAllPersons() {
                 await personApi.getAllPersons().then(response => {
-                    this.personList = response;
+                    this.personList = response.personList;
+                    this.statisticList = response.statisticsList;
                     this.CurrentTableHeaders = this.PersonTableHeaders;
                 });
             },
@@ -223,7 +225,6 @@ import {personApi} from '../service/person.api.js'
                     }
                     else{
                         document.getElementById("InfoSection").style.display = "block";
-                        this.personSelectedObj = this.selectedRow[0]
                     }
                 }
             }
