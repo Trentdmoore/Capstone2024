@@ -30,6 +30,17 @@ export const personApi = {
             return response.data
         })
     },
+    async updatePersonInfo(personSelectedObj) {
+        return await axios({
+            method: 'put',
+            url: `${BASE_URL}/UpdatePerson`,
+            data: personSelectedObj
+        }).then(response => {
+            return response.data
+        }).catch(e => {
+            console.log(e);
+        })
+    }
 }
 
 personApi
