@@ -1,7 +1,7 @@
 <template>
     <!-- APP BAR CODE -->
     <v-app-bar
-        :color="'red-darken-4'"
+        :color="'teal-darken-4'"
         prominent
       >
         <v-app-bar-nav-icon variant="text" @click.stop="showNavDrawer = !showNavDrawer"></v-app-bar-nav-icon>
@@ -57,7 +57,7 @@
                     {
                         title: 'Logs Menu',
                         value: 'logMenu',
-                        route: '/Logs'
+                        route: '/LogInfo'
                     }
                 ],
             }
