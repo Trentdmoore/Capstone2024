@@ -1,5 +1,5 @@
 <template>
-    <v-alert v-model="successAlert" type="success" :text="alertText" closable>
+    <v-alert v-model="successAlert" type="success" :text="alertText" closable class="mt-16">
     </v-alert>
 
 
@@ -32,8 +32,8 @@
             </v-col>
             
             <!--Info Form-->
-            <v-col style="display: none" id="InfoSection">
-                <v-card outlined color="grey-lighten-3" class="section-container" elevation="2" flex>
+            <v-col v-show="selectedRow.length > 0">
+                <v-card outlined color="grey-lighten-4" class="section-container" elevation="2" flex>
                     <v-card-title :style="'text-align: left'">Information</v-card-title>
                         <v-card-text>
                             <v-form>
@@ -63,7 +63,7 @@
                         </v-card-text>
                     <v-card-actions>
                     <!-- Save and Delete buttons -->
-                    <v-btn @click="saveData" color="primary">Save</v-btn>
+                    <v-btn @click="UpdatePersonInfo()" color="primary">Save</v-btn>
                     <v-btn @click="deleteData" color="error">Delete</v-btn>
                     </v-card-actions>
                 </v-card>
@@ -186,6 +186,19 @@ import {personApi} from '../service/person.api.js'
                     }
                 })
             },
+            async UpdatePersonInfo() {
+                await personApi.updatePersonInfo(this.personSelectedObj).then(response => {
+                    if(response === 'Success'){
+                        this.alertText = `${this.personSelectedObj.fName} ${this.personSelectedObj.lName} was successfully updated`
+                        this.successAlert = true;
+                        this.LoadTable();
+                        this.setAlertTimeOut();
+                    }
+                    else{
+                        this.alertText = `${this.personSelectedObj.fName} ${this.personSelectedObj.lName} failed to update`
+                    }
+                })
+            },
             LoadTable(){
                 this.GetAllPersons();
             },
@@ -210,23 +223,17 @@ import {personApi} from '../service/person.api.js'
         },
         watch: {
             selectedRow(){
-                if(this.currentTableView === 'Person'){
-                    document.getElementById("InfoSection").style.display = "none";
-                    if(this.selectedRow.length < 1){
-                        this.personSelectedObj = {
-                            id: "",
-                            fName: "",
-                            lName: "",
-                            email: "",
-                            title: "",
-                            cid: "",
-                            accessCode: ""
-                        }
-                    }
-                    else{
-                        document.getElementById("InfoSection").style.display = "block";
-                    }
-                }
+                
+                    this.selectedRow.forEach(item => {
+                        this.personSelectedObj.id = item.id
+                        this.personSelectedObj.fName = item.fName
+                        this.personSelectedObj.lName = item.lName
+                        this.personSelectedObj.email = item.email
+                        this.personSelectedObj.title = item.title
+                        this.personSelectedObj.cid = item.cid
+                        this.personSelectedObj.accessCode = item.accessCode
+                    })
+                
             }
         },
         async beforeMount() {
