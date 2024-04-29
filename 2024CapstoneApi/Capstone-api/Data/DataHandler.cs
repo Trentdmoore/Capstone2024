@@ -175,7 +175,7 @@ namespace Capstone_api.Data
                         accessLog.LockNum = reader.GetInt32("LockNum");
                         accessLog.AccessTime = reader.GetDateTime("AccessTime");
                         accessLog.CID = reader.GetInt32("CID");
-                        accessLog.Accepted = reader.GetBoolean("Accepted");
+                        accessLog.Accepted = (reader.GetString("Accepted") == "Y") ? true : false;
 
                         AccessLogList.Add(accessLog);
                     }
