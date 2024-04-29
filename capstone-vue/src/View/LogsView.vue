@@ -5,6 +5,7 @@
             <v-row>
                 <v-col>
                     <v-data-table
+                    :style="'text-align: left'"
                     :headers = "CurrentTableHeaders1"
                     :items = "accessLogList"
                     :row-props="colorSelectedRow"
@@ -30,6 +31,7 @@
                 </v-col>
                 <v-col>
                     <v-data-table
+                    :style="'text-align: left'"
                     :headers = "CurrentTableHeaders2"
                     :items = "requestLogList"
                     :row-props="colorSelectedRow"

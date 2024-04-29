@@ -57,7 +57,7 @@
                     {
                         title: 'Logs Menu',
                         value: 'logMenu',
-                        route: '/LogInfo'
+                        route: '/LogInfo/0'
                     }
                 ],
             }

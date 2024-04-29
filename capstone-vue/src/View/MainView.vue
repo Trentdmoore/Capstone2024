@@ -7,6 +7,7 @@
                     :headers = "CurrentTableHeaders" 
                     :items = "personList"
                     :row-props="colorSelectedRow"
+                    :item-class="colorSelectedRow"
                     v-model="selectedRow"
                     return-object
                     select-strategy="single"
@@ -38,32 +39,46 @@
                         <v-card-text>
                             <v-form>
                                 <v-row >
-                                    <v-col cols="2">
+                                    <v-col cols="3">
                                         <!-- Placeholder for picture -->
                                         <img src="placeholder.jpg" alt="Placeholder" class="picture"/>
                                     </v-col>
-                                    <v-row>
-                                        <!-- Text boxes -->
-                                        <v-col cols="3">
-                                            <v-text-field id="fName" variant="underlined" color="green" @update="update(id)" label="First Name" v-model="personSelectedObj.fName"></v-text-field>
-                                            <v-text-field readonly="selectedRow === personSelectedObj.id" color="red" variant="underlined" label="ID" v-model="personSelectedObj.id " ></v-text-field>
-                                            <v-text-field variant="underlined"  color="green" v-model="personSelectedObj.accessCode"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="3">
-                                            <v-text-field variant="underlined" color="green" label="Last Name" v-model="personSelectedObj.lName"></v-text-field>
-                                            <v-text-field variant="underlined" color="green" label="CID" v-model="personSelectedObj.cid"></v-text-field>
-                                        </v-col>
-                                        <v-col cols="3">
-                                            <v-text-field variant="underlined" color="green" label="Email" v-model="personSelectedObj.email"></v-text-field>
-                                            <v-text-field variant="underlined" color="green" label="Title" v-model="personSelectedObj.title"></v-text-field>
-                                        </v-col>
-                                    </v-row>
+                                    <v-col cols="9">
+                                        <v-row>
+                                            <!-- Text boxes -->
+                                            <v-col cols="4">
+                                                <v-text-field id="fName" variant="underlined" color="green" @update="update(id)" label="First Name" v-model="personSelectedObj.fName"></v-text-field>
+                                                <v-text-field readonly="selectedRow === personSelectedObj.id" color="red" variant="underlined" label="ID" v-model="personSelectedObj.id " ></v-text-field>
+                                                <v-text-field variant="underlined"  color="green" v-model="personSelectedObj.accessCode"></v-text-field>
+                                                <v-text-field variant="underlined" color="green" label="Email" v-model="personSelectedObj.email"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="4">
+                                                <v-text-field variant="underlined" color="green" label="Last Name" v-model="personSelectedObj.lName"></v-text-field>
+                                                <v-text-field variant="underlined" color="green" label="CID" v-model="personSelectedObj.cid"></v-text-field>
+                                                <v-text-field variant="underlined" color="green" label="Title" v-model="personSelectedObj.title"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="4">
+                                                    <!-- <br/>
+                                                    <v-label :text="personQuickStatistics.startTime"></v-label><br /><br />
+                                                    <v-label :text="personQuickStatistics.endTime"></v-label><br /><br />
+                                                    <v-label :text="personQuickStatistics.numFailedLastDay"></v-label><br /><br />
+                                                    <v-label :text="personQuickStatistics.hasPendingRequest"></v-label><br /><br />
+                                                    <v-label :text="personQuickStatistics.numAccessesLastHour"></v-label> -->
+                                                <v-text-field variant="underlined" disabled label="Start Time" v-model="personQuickStatistics.startTime"></v-text-field>
+                                                <v-text-field variant="underlined" disabled label="EndTime" v-model="personQuickStatistics.endTime"></v-text-field>
+                                                <v-text-field variant="underlined" disabled label="Failed Attempts" v-model="personQuickStatistics.numFailedLastDay"></v-text-field>
+                                                <v-text-field variant="underlined" disabled label="Pending Request" v-model="personQuickStatistics.hasPendingRequest"></v-text-field>
+                                                <v-text-field variant="underlined" disabled label="Access Attempts" v-model="personQuickStatistics.numAccessesLastHour"></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                    </v-col>
                                 </v-row>
                             </v-form>
                         </v-card-text>
                     <v-card-actions>
                     <!-- Save and Delete buttons -->
-                    <v-btn @click="UpdatePersonInfo()" color="primary">Save</v-btn>
+                    <v-btn @click="GoToLogsPerson()" color="primary">Logs</v-btn>
+                    <v-btn @click="UpdatePersonInfo()" color="success">Save</v-btn>
                     <v-btn @click="DeletePerson()" color="error">Delete</v-btn>
                     </v-card-actions>
                 </v-card>
@@ -74,6 +89,7 @@
 </template>
 
 <script>
+import router from '@/router';
 import {personApi} from '../service/person.api.js'
 
     export default {
@@ -108,6 +124,7 @@ import {personApi} from '../service/person.api.js'
                 currentTableView: "Person",
                 selection: [],
                 selectedRow: [],
+                rowItem: {},
 
                 //DataBase Model Objects
                 personSelectedObj: {
@@ -127,6 +144,14 @@ import {personApi} from '../service/person.api.js'
                     title: "",
                     cid: "",
                     accessCode: ""
+                },
+                personQuickStatistics: {
+                    id: 0,
+                    startTime: "",
+                    endTime: "",
+                    numFailedLastDay: 0,
+                    hasPendingRequest: "",
+                    numAccessesLastHour: 0
                 },
                 requestLogObj: {},
                 accessLogObj: {},
@@ -181,7 +206,7 @@ import {personApi} from '../service/person.api.js'
                         document.getElementById("PersonInfo").style.display = "none";
                         this.successAlert = true;
                         this.setAlertTimeOut();
-                        location.reload();
+                        this.ReloadTableOnChange();
 
                     }
                     else{
@@ -196,7 +221,7 @@ import {personApi} from '../service/person.api.js'
                         document.getElementById("PersonInfo").style.display = "none";
                         this.successAlert =true;
                         this.setAlertTimeOut();
-                        location.reload();
+                        this.ReloadTableOnChange();
                     }
                     else{
                         this.alertText = `${this.personSelectedObj.fName} ${this.personSelectedObj.lName} failed to deleted`
@@ -206,9 +231,18 @@ import {personApi} from '../service/person.api.js'
             LoadTable(){
                 this.GetAllPersons();
             },
-            colorSelectedRow(row) {
+            ReloadTableOnChange(){
+                this.GetAllPersons();
+                this.selectedRow = [];
+                this.selectedRow.push(this.personSelectedObj)
+            },
+            GoToLogsPerson(){
+                router.push(`/LogInfo/${this.personSelectedObj.id}`)
+            },
+            colorSelectedRow(row) {          
                 if(row.item === this.selectedRow[0]){
-                    return {style: 'background: #42A5F5; color: white;'};
+                    this.rowItem = row;
+                    return {style: 'background: #42A5F5; color: white;'};             
                 }
             },
             toggleCreatePersonDialog(){
@@ -236,8 +270,17 @@ import {personApi} from '../service/person.api.js'
                         this.personSelectedObj.title = item.title
                         this.personSelectedObj.cid = item.cid
                         this.personSelectedObj.accessCode = item.accessCode
+                    });
+                    this.statisticList.forEach(stat => {
+                        if(stat.id == this.personSelectedObj.id){
+                            this.personQuickStatistics.id = stat.id
+                            this.personQuickStatistics.startTime = stat.startTime
+                            this.personQuickStatistics.endTime = stat.endTime
+                            this.personQuickStatistics.numFailedLastDay = stat.numFailedLastDay
+                            this.personQuickStatistics.hasPendingRequest = stat.hasPendingRequest
+                            this.personQuickStatistics.numAccessesLastHour = stat.numAccessesLastHour
+                        }
                     })
-
                 
             }
         },
