@@ -1,12 +1,8 @@
 <template>
-    <v-alert v-model="successAlert" type="success" :text="alertText" closable class="mt-16">
-    </v-alert>
-
-
     <v-container class="mt-16">
         <v-row>
             <!--Table View-->
-            <v-col cols="12">
+            <v-col cols="12" fixed>
                 <v-data-table :style="'text-align: left'"
                     :headers = "CurrentTableHeaders" 
                     :items = "personList"
@@ -29,10 +25,14 @@
                         </v-toolbar>
                     </template>
                 </v-data-table>
+
+
+                <v-alert v-model="successAlert" type="success" :text="alertText" closable class="mt-16">
+                </v-alert>
             </v-col>
             
             <!--Info Form-->
-            <v-col v-show="selectedRow.length > 0">
+            <v-col v-show="selectedRow.length > 0" id="PersonInfo" fixed>
                 <v-card outlined color="grey-lighten-4" class="section-container" elevation="2" flex>
                     <v-card-title :style="'text-align: left'">Information</v-card-title>
                         <v-card-text>
@@ -45,17 +45,17 @@
                                     <v-row>
                                         <!-- Text boxes -->
                                         <v-col cols="3">
-                                            <v-text-field variant="underlined" label="First Name" v-model="personSelectedObj.fName"></v-text-field>
-                                            <v-text-field variant="underlined" label="ID" v-model="personSelectedObj.id"></v-text-field>
-                                            <v-text-field variant="underlined" label="Access" v-model="personSelectedObj.accessCode"></v-text-field>
+                                            <v-text-field id="fName" variant="underlined" color="green" @update="update(id)" label="First Name" v-model="personSelectedObj.fName"></v-text-field>
+                                            <v-text-field readonly="selectedRow === personSelectedObj.id" color="red" variant="underlined" label="ID" v-model="personSelectedObj.id " ></v-text-field>
+                                            <v-text-field variant="underlined"  color="green" v-model="personSelectedObj.accessCode"></v-text-field>
                                         </v-col>
                                         <v-col cols="3">
-                                            <v-text-field variant="underlined" label="Last Name" v-model="personSelectedObj.lName"></v-text-field>
-                                            <v-text-field variant="underlined" label="CID" v-model="personSelectedObj.cid"></v-text-field>
+                                            <v-text-field variant="underlined" color="green" label="Last Name" v-model="personSelectedObj.lName"></v-text-field>
+                                            <v-text-field variant="underlined" color="green" label="CID" v-model="personSelectedObj.cid"></v-text-field>
                                         </v-col>
                                         <v-col cols="3">
-                                            <v-text-field variant="underlined" label="Email" v-model="personSelectedObj.email"></v-text-field>
-                                            <v-text-field variant="underlined" label="Title" v-model="personSelectedObj.title"></v-text-field>
+                                            <v-text-field variant="underlined" color="green" label="Email" v-model="personSelectedObj.email"></v-text-field>
+                                            <v-text-field variant="underlined" color="green" label="Title" v-model="personSelectedObj.title"></v-text-field>
                                         </v-col>
                                     </v-row>
                                 </v-row>
@@ -64,7 +64,7 @@
                     <v-card-actions>
                     <!-- Save and Delete buttons -->
                     <v-btn @click="UpdatePersonInfo()" color="primary">Save</v-btn>
-                    <v-btn @click="deleteData" color="error">Delete</v-btn>
+                    <v-btn @click="DeletePerson()" color="error">Delete</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -161,6 +161,7 @@ import {personApi} from '../service/person.api.js'
                         'Guest'
                     ],
 
+            
             }
         },
         methods: {
@@ -172,30 +173,33 @@ import {personApi} from '../service/person.api.js'
                     this.CurrentTableHeaders = this.PersonTableHeaders;
                 });
             },
-            async InsertPersonInfo(){
-                await personApi.insertPersonInfo(this.personObj).then(response => {
-                    if(response === 'Success'){
-                        this.alertText = `${this.personObj.fName} ${this.personObj.lName} was successfully created`
-                        this.successAlert = true;
-                        this.toggleCreatePersonDialog();
-                        this.LoadTable();
-                        this.setAlertTimeOut();
-                    }
-                    else{
-                        this.alertText = `${this.personObj.fName} ${this.personObj.lName} failed to created`
-                    }
-                })
-            },
+            //fix the table update/reload part
             async UpdatePersonInfo() {
                 await personApi.updatePersonInfo(this.personSelectedObj).then(response => {
                     if(response === 'Success'){
                         this.alertText = `${this.personSelectedObj.fName} ${this.personSelectedObj.lName} was successfully updated`
+                        document.getElementById("PersonInfo").style.display = "none";
                         this.successAlert = true;
-                        this.LoadTable();
                         this.setAlertTimeOut();
+                        location.reload();
+
                     }
                     else{
                         this.alertText = `${this.personSelectedObj.fName} ${this.personSelectedObj.lName} failed to update`
+                    }
+                })
+            },
+            async DeletePerson() {
+                await personApi.deletePerson(this.personSelectedObj.id).then(response => {
+                    if(response === 'Success'){
+                        this.alertText = `${this.personSelectedObj.fName} ${this.personSelectedObj.lName} was deleted`
+                        document.getElementById("PersonInfo").style.display = "none";
+                        this.successAlert =true;
+                        this.setAlertTimeOut();
+                        location.reload();
+                    }
+                    else{
+                        this.alertText = `${this.personSelectedObj.fName} ${this.personSelectedObj.lName} failed to deleted`
                     }
                 })
             },
@@ -218,7 +222,7 @@ import {personApi} from '../service/person.api.js'
             setAlertTimeOut(){
                 setTimeout(() =>{
                     this.successAlert=false
-                }, 3000)
+                }, 5000)
             }
         },
         watch: {
@@ -233,6 +237,7 @@ import {personApi} from '../service/person.api.js'
                         this.personSelectedObj.cid = item.cid
                         this.personSelectedObj.accessCode = item.accessCode
                     })
+
                 
             }
         },

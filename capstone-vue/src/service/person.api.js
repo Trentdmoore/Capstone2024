@@ -40,6 +40,17 @@ export const personApi = {
         }).catch(e => {
             console.log(e);
         })
+    },
+    async deletePerson(personSelectedObjID) {
+       return await axios({
+        method: 'delete',
+        url:    `${BASE_URL}/DeletePerson/` + personSelectedObjID,
+        data:   personSelectedObjID
+        }).then(response => {
+        return response.data
+        }).catch(e => {
+        console.log(e);
+        })
     }
 }
 
