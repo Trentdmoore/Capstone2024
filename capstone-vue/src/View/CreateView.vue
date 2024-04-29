@@ -2,6 +2,10 @@
     <!--Create Person Form-->
     <v-container class="ma-auto">
         <v-form class="mx-auto">
+
+            <v-alert v-model="successAlert" type="success" :text="alertText" closable class="mt-16">
+            </v-alert>
+
             <v-card width="1000" height="400" class="mx-auto">
                 <v-card-title>Create Person</v-card-title>
                 <v-card-subtitle>Fill out form and click sumbit</v-card-subtitle>
@@ -78,6 +82,8 @@ import {personApi} from '../service/person.api.js'
         data() {
             return {
                 //DataBase Model Objects
+                successAlert:  false,
+
                 personSelectedObj: {
                     id: "",
                     fName: "",
@@ -109,6 +115,26 @@ import {personApi} from '../service/person.api.js'
             }
         },
         methods: {
+            async InsertPersonInfo(){
+                await personApi.insertPersonInfo(this.personObj).then(response => {
+                    if(response === 'Success'){
+                        this.alertText = `${this.personObj.fName} ${this.personObj.lName} was successfully created`
+                        this.successAlert = true;
+                        this.setAlertTimeOut();
+                        location.reload();
+                    }
+                    else{
+                        this.alertText = `${this.personObj.fName} ${this.personObj.lName} failed to created`
+                        this.successAlert = true;
+                        this.setAlertTimeOut();
+                    }
+                })
+            },
+            setAlertTimeOut(){
+                setTimeout(() =>{
+                    this.successAlert=false
+                }, 4000)
+            },
             async GetAllPersons() {
                 await personApi.getAllPersons().then(response => {
                     this.personList = response;
