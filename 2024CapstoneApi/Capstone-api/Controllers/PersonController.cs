@@ -18,7 +18,7 @@ namespace Capstone_api.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpGet("/allPersons")]
+        [HttpGet("/AllPersons")]
         public async Task<ActionResult<PersonResponse>> GetAllPersons()
         {
             try
@@ -41,13 +41,13 @@ namespace Capstone_api.Controllers
             }
         }
 
-        [HttpGet("/AllAccessLogs")]
-        public async Task<ActionResult<List<AccessLog>>> GetAllAccessLogs()
+        [HttpGet("/AllAccessLogs/{id:int}")]
+        public async Task<ActionResult<List<AccessLog>>> GetAllAccessLogs(int id)
         {
             try
             {
                 var dataHandler = new DataHandler();
-                var data = await dataHandler.getAllAccessLogs(_dbContext);
+                var data = await dataHandler.getAllAccessLogs(_dbContext, id);
 
                 if (data != null)
                 {
@@ -65,14 +65,14 @@ namespace Capstone_api.Controllers
             }
         }
 
-        [HttpGet("/AllRequestLogs")]
+        [HttpGet("/AllRequestLogs/{id:int}")]
 
-        public async Task<ActionResult<List<RequestLog>>> GetAllRequestLogs()
+        public async Task<ActionResult<List<RequestLog>>> GetAllRequestLogs(int id)
         {
             try
             {
                 var dataHandler = new DataHandler();
-                var data = await dataHandler.getAllRequestLogs(_dbContext);
+                var data = await dataHandler.getAllRequestLogs(_dbContext, id);
 
                 if (data != null)
                 {

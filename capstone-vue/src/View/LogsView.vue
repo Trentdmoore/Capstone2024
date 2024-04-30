@@ -123,14 +123,14 @@ export default {
     methods: {
 
         async GetAllAccessLogs() {
-            await personApi.getAllAccessLogs().then(response => {
+            await personApi.getAllAccessLogs(`${this.$route.params.id}`).then(response => {
                 this.accessLogList = response;
                 this.CurrentTableHeaders1 = this.AccessLogTableHeaders;
             });
         },
 
         async GetAllRequestLogs() {
-            await personApi.getAllRequestLogs().then(response => {
+            await personApi.getAllRequestLogs(this.$route.params.id).then(response => {
                 this.requestLogList = response;
                 this.CurrentTableHeaders2 = this.RequestLogTableHeaders;
             });

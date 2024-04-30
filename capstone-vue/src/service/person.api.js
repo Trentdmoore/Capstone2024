@@ -5,8 +5,13 @@ const BASE_URL = 'https://localhost:7238'
 export const personApi = {
     
     async getAllPersons() {
-       return await axios.get(`${BASE_URL}/allPersons`).then(response => {
-            return response.data
+        return await axios({
+            method: 'get',
+            url: `${BASE_URL}/AllPersons`,
+        }).then(response => {
+            return response.data         
+        }).catch(e => {
+            console.log(e);
         })
     },
     async insertPersonInfo(personObj) {
@@ -20,14 +25,26 @@ export const personApi = {
             console.log(e);
         })
     },
-    async getAllAccessLogs() {
-        return await axios.get(`${BASE_URL}/AllAccessLogs`).then(response => {
-            return response.data
+    async getAllAccessLogs(id) {
+        return await axios({
+            method: 'get',
+            url: `${BASE_URL}/AllAccessLogs/${id}`,
+            data: Number(id)
+        }).then(response => {
+            return response.data         
+        }).catch(e => {
+            console.log(e);
         })
     },
-    async getAllRequestLogs() {
-        return await axios.get(`${BASE_URL}/AllRequestLogs`).then(response => {
-            return response.data
+    async getAllRequestLogs(id) {
+        return await axios({
+            method: 'get',
+            url: `${BASE_URL}/AllRequestLogs`,
+            data: id
+        }).then(response => {
+            return response.data         
+        }).catch(e => {
+            console.log(e);
         })
     },
     async updatePersonInfo(personSelectedObj) {
