@@ -148,7 +148,7 @@ namespace Capstone_api.Data
             }
         }
 
-        public async Task<List<AccessLog>> getAllAccessLogs(GlobalDBContext dbContext)
+        public async Task<List<AccessLog>> getAllAccessLogs(GlobalDBContext dbContext, int id)
         {
             var AccessLogList = new List<AccessLog>();
 
@@ -163,7 +163,16 @@ namespace Capstone_api.Data
             {
                 command.Connection = conn;
 
-                command.CommandText = sqlQueryList.GetAllAccessLogs();
+                if(id != 0)
+                {
+                    command.CommandText = sqlQueryList.GetIndividualAccessLogs();
+                    var param = new CustomDBParameter(command);
+                    command.Parameters.Add(param.CreateDbParameter("ID", id));
+                }
+                else
+                {
+                    command.CommandText = sqlQueryList.GetAllAccessLogs();
+                }
 
                 using (var reader = command.ExecuteReader())
                 {
@@ -185,7 +194,7 @@ namespace Capstone_api.Data
             }
         }
 
-        public async Task<List<RequestLog>> getAllRequestLogs(GlobalDBContext dbContext)
+        public async Task<List<RequestLog>> getAllRequestLogs(GlobalDBContext dbContext, int id)
         {
             var RequestLogList = new List<RequestLog>();
 
@@ -200,7 +209,16 @@ namespace Capstone_api.Data
             {
                 command.Connection = conn;
 
-                command.CommandText = sqlQueryList.GetAllRequestLogs();
+                if (id != 0)
+                {
+                    command.CommandText = sqlQueryList.GetIndividualRequestLogs();
+                    var param = new CustomDBParameter(command);
+                    command.Parameters.Add(param.CreateDbParameter("ID", id));
+                }
+                else
+                {
+                    command.CommandText = sqlQueryList.GetAllRequestLogs();
+                }
 
                 using (var reader = command.ExecuteReader())
                 {

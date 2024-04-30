@@ -31,11 +31,31 @@
             return sql;
         }
 
+        public string GetIndividualAccessLogs()
+        {
+            string sql =
+                @"SELECT ID, LockNum, AccessTime, CID, Accepted
+                  FROM CP_AccessLog
+                  WHERE ID = @ID;                                ";
+
+            return sql;
+        }
+
         public string GetAllRequestLogs()
         {
             string sql =
                 @"SELECT ID, LockNum, AccessCode, DateRequested, DateApproved, AdvisorID
                   FROM CP_RequestLog;                                ";
+
+            return sql;
+        }
+
+        public string GetIndividualRequestLogs()
+        {
+            string sql =
+                @"SELECT ID, LockNum, AccessCode, DateRequested, DateApproved, AdvisorID
+                  FROM CP_RequestLog
+                  WHERE ID = @ID;                                ";
 
             return sql;
         }
