@@ -50,11 +50,6 @@
                         route: '/Create'
                     },
                     {
-                        title: 'Manage Employee',
-                        value: 'managaeEmployee',
-                        route: '/Manage'
-                    },
-                    {
                         title: 'Logs Menu',
                         value: 'logMenu',
                         route: '/LogInfo/0'

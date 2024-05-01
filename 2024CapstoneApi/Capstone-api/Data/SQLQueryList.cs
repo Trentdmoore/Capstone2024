@@ -89,7 +89,7 @@
                     (SELECT count(*)
                     FROM CP_AccessLog
                     WHERE Accepted = 'N'
-                    AND AccessTime > DATEADD(DAY, -1, GETDATE())) as NumFailed,
+					AND CP_AccessLog.ID = p.ID) as NumFailed,
                     (SELECT CASE WHEN EXISTS (
 	                    SELECT *
 	                    FROM CP_RequestLog
@@ -99,7 +99,7 @@
                     ELSE 'N' END) as HasPendingRequest,
                     (Select count(*)
                     FROM CP_AccessLog
-                    WHERE AccessTime > DATEADD(HOUR, -1, GETDATE())) as NumAccessesLastHour
+					WHERE CP_AccessLog.ID = p.ID) as NumAccessesLastHour
                     FROM CP_Person P INNER JOIN CP_AccessCodes AC
                     ON P.AccessCode = AC.AccessCode;";
             return sql;
