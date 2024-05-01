@@ -17,7 +17,7 @@
                 
                     <template v-slot:top>
                         <v-toolbar
-                            :color="'teal-lighten-3'"
+                            :color="'teal-lighten-1'"
                             :rounded="true"
                             dark
                         >
@@ -43,7 +43,7 @@
                 
                     <template v-slot:top>
                         <v-toolbar
-                            :color="'teal-lighten-3'"
+                            :color="'teal-lighten-1'"
                             :rounded="true"
                             dark
                         >
